@@ -62,10 +62,27 @@ public class TaskController {
 
 		return taskService.createNewTask(task);
 
-	}
+	}	
 
 	//更新
+	@PostMapping("/update")
+	public TaskEntity uadateTask(@RequestBody TaskRequest taskRequest){
 
+		TaskEntity task = new TaskEntity();
+
+		task.setTaskId(taskRequest.getId());
+		task.setTaskName(taskRequest.getName());
+		if(taskRequest.getDate() != null) {
+			task.setTaskDate(Date.valueOf(taskRequest.getDate()));
+		}
+		if(taskRequest.getTime() != null) {
+			task.setTaskTime(Time.valueOf(taskRequest.getTime()));
+			}
+		task.setTaskPlace(taskRequest.getPlace());
+
+		return taskService.updateTask(task);
+
+	}
 
 	//削除(Entity)
 	@DeleteMapping("/delete/{taskId}")
@@ -76,16 +93,12 @@ public class TaskController {
 	}
 
 	//完了
-	@PostMapping("/complete")
-	public String completeTask(TaskRequest taskRequest) {
+	// @PostMapping("/complete")
+	// public String completeTask(TaskRequest taskRequest) {
 		
-		TaskEntity task = taskService.findByTaskId(taskRequest.getTaskId());
-		task.setCompleteFlag(!task.isCompleteFlag());
+	// 	TaskEntity task = taskService.findByTaskId(Id);
+	// 	task.setCompleteFlag(!task.isCompleteFlag());
 				
-		return taskService.completeTask(task);
-	}
-
-	//完了
-
-    
+	// 	return taskService.findByTaskId(taskId);
+	// } 
 }

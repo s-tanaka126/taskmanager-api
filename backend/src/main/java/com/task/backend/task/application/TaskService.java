@@ -33,13 +33,17 @@ public class TaskService {
 	
 	}
 
+    public TaskEntity updateTask(TaskEntity task) {
+		return taskRepository.save(task);
+	
+	}
 	public void deleteTask(TaskEntity task) {
 		taskRepository.delete(task);
 		
 	}
 
-	public TaskEntity completeTask(TaskEntity task) {
-		return taskRepository.save(task);
-	}
+	// public TaskEntity completeTask(int taskId) {
+	// 	return taskRepository.findByTaskId(taskId);
+	// }
     
 }
