@@ -68,10 +68,12 @@ public class TaskController {
 	@PostMapping("/update")
 	public TaskEntity uadateTask(@RequestBody TaskRequest taskRequest){
 
-		TaskEntity task = new TaskEntity();
+		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
 
-		task.setTaskId(taskRequest.getId());
 		task.setTaskName(taskRequest.getName());
+		task.setTaskPlace(taskRequest.getPlace());
+		task.setCompleteFlag(taskRequest.isComplete());
+
 		if(taskRequest.getDate() != null) {
 			task.setTaskDate(Date.valueOf(taskRequest.getDate()));
 		}
@@ -93,12 +95,12 @@ public class TaskController {
 	}
 
 	//完了
-	// @PostMapping("/complete")
-	// public String completeTask(TaskRequest taskRequest) {
+	@PostMapping("/complete")
+	public String completeTask(TaskRequest taskRequest) {
 		
-	// 	TaskEntity task = taskService.findByTaskId(Id);
-	// 	task.setCompleteFlag(!task.isCompleteFlag());
+		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
+		task.setCompleteFlag(!task.isCompleteFlag());
 				
-	// 	return taskService.findByTaskId(taskId);
-	// } 
+		return taskService.completeTask(task);
+	} 
 }
