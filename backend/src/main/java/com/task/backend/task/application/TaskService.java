@@ -42,8 +42,8 @@ public class TaskService {
 		taskRepository.delete(task);
 	}
 
-	public TaskEntity completeTask(TaskEntity task) {
-		return taskRepository.save(task);
-	}
+    public TaskEntity completeTask(TaskEntity task) {
+	 	return taskRepository.save(task);
+	 }
     
 }

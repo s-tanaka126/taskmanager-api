@@ -96,7 +96,7 @@ public class TaskController {
 
 	//完了
 	@PostMapping("/complete")
-	public String completeTask(TaskRequest taskRequest) {
+	public TaskEntity completeTask(@RequestBody TaskRequest taskRequest) {
 		
 		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
 		task.setCompleteFlag(!task.isCompleteFlag());
