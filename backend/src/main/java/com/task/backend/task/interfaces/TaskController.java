@@ -3,7 +3,9 @@ package com.task.backend.task.interfaces;
 
 import com.task.backend.commom.entity.task.TaskEntity;
 import com.task.backend.task.application.TaskService;
+import com.task.backend.task.domain.TaskFactory;
 import com.task.backend.task.domain.request.TaskRequest;
+import com.task.backend.task.domain.responese.TaskResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +28,9 @@ public class TaskController {
     @Autowired
 	TaskService taskService;
 
+	@Autowired
+	TaskFactory taskFactory;
+
 	//全取得
 	@GetMapping	("/list")
 	public List<TaskEntity> getTask() {
@@ -36,13 +41,18 @@ public class TaskController {
 
 	}
 
- 	//詳細情報取得
+
+	//詳細情報取得（これから）
 	@GetMapping("/{taskId}")
-	public TaskEntity getTask(@PathVariable int taskId){
+	public TaskResponse getTask(@PathVariable int taskId){
+		return taskFactory.createTaskResponse(taskService.findByTaskId(taskId));
+	}
 
-		return taskService.findByTaskId(taskId);
-
-		}
+ 	//詳細情報取得（今まで）
+	//@GetMapping("/{taskId}")
+	//public TaskEntity getTask(@PathVariable int taskId){
+	//	return taskService.findByTaskId(taskId);
+	//}
 
 	//登録
 	@PostMapping("/new")
@@ -68,10 +78,12 @@ public class TaskController {
 	@PostMapping("/update")
 	public TaskEntity uadateTask(@RequestBody TaskRequest taskRequest){
 
-		TaskEntity task = new TaskEntity();
+		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
 
-		task.setTaskId(taskRequest.getId());
 		task.setTaskName(taskRequest.getName());
+		task.setTaskPlace(taskRequest.getPlace());
+		task.setCompleteFlag(taskRequest.isComplete());
+
 		if(taskRequest.getDate() != null) {
 			task.setTaskDate(Date.valueOf(taskRequest.getDate()));
 		}
@@ -93,12 +105,12 @@ public class TaskController {
 	}
 
 	//完了
-	// @PostMapping("/complete")
-	// public String completeTask(TaskRequest taskRequest) {
+	@PostMapping("/complete")
+	public TaskEntity completeTask(@RequestBody TaskRequest taskRequest) {
 		
-	// 	TaskEntity task = taskService.findByTaskId(Id);
-	// 	task.setCompleteFlag(!task.isCompleteFlag());
+		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
+		task.setCompleteFlag(!task.isCompleteFlag());
 				
-	// 	return taskService.findByTaskId(taskId);
-	// } 
+		return taskService.completeTask(task);
+	} 
 }
