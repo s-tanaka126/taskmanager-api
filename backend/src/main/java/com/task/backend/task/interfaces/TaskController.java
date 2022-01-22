@@ -31,32 +31,22 @@ public class TaskController {
 	@Autowired
 	TaskFactory taskFactory;
 
+
 	//全取得
 	@GetMapping	("/list")
-	public List<TaskEntity> getTask() {
-
-	    List<TaskEntity> task = taskService.getAll();
-	
-		return task;
-
+	public List<TaskResponse> getTask(){
+		return taskFactory.createTasksResponse(taskService.getAll());
 	}
 
-
-	//詳細情報取得（これから）
+	//詳細情報取得
 	@GetMapping("/{taskId}")
 	public TaskResponse getTask(@PathVariable int taskId){
 		return taskFactory.createTaskResponse(taskService.findByTaskId(taskId));
 	}
 
- 	//詳細情報取得（今まで）
-	//@GetMapping("/{taskId}")
-	//public TaskEntity getTask(@PathVariable int taskId){
-	//	return taskService.findByTaskId(taskId);
-	//}
-
 	//登録
 	@PostMapping("/new")
-	public TaskEntity createNewTask(@RequestBody TaskRequest taskRequest){
+	public TaskResponse createsNewTask(@RequestBody TaskRequest taskRequest){
 
 		TaskEntity task = new TaskEntity();
 
@@ -70,47 +60,47 @@ public class TaskController {
 			}
 		task.setTaskPlace(taskRequest.getPlace());
 
-		return taskService.createNewTask(task);
+		return taskFactory.createTaskResponse(task);
 
-	}	
+	}
 
 	//更新
 	@PostMapping("/update")
-	public TaskEntity uadateTask(@RequestBody TaskRequest taskRequest){
-
+	public TaskResponse uadateTask(@RequestBody TaskRequest taskRequest){
+	
 		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
-
+	
 		task.setTaskName(taskRequest.getName());
 		task.setTaskPlace(taskRequest.getPlace());
 		task.setCompleteFlag(taskRequest.isComplete());
-
+	
 		if(taskRequest.getDate() != null) {
 			task.setTaskDate(Date.valueOf(taskRequest.getDate()));
 		}
 		if(taskRequest.getTime() != null) {
 			task.setTaskTime(Time.valueOf(taskRequest.getTime()));
 			}
-		task.setTaskPlace(taskRequest.getPlace());
-
-		return taskService.updateTask(task);
-
+			task.setTaskPlace(taskRequest.getPlace());
+	
+		return taskFactory.createTaskResponse(task);
+	
 	}
 
 	//削除(Entity)
 	@DeleteMapping("/delete/{taskId}")
 	public void deleteTask(@PathVariable int taskId) {
 		TaskEntity deleteTask = taskService.findByTaskId(taskId);
-		taskService.deleteTask(deleteTask);
+		taskFactory.createTaskResponse(deleteTask);
 		
 	}
 
 	//完了
 	@PostMapping("/complete")
-	public TaskEntity completeTask(@RequestBody TaskRequest taskRequest) {
+	public TaskResponse completeTask(@RequestBody TaskRequest taskRequest) {
 		
 		TaskEntity task = taskService.findByTaskId(taskRequest.getId());
 		task.setCompleteFlag(!task.isCompleteFlag());
 				
-		return taskService.completeTask(task);
+		return taskFactory.createTaskResponse(task);
 	} 
 }
