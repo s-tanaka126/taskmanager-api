@@ -44,6 +44,6 @@ public class TaskService {
 
     public TaskEntity completeTask(TaskEntity task) {
 	 	return taskRepository.save(task);
-	 }
+	}
     
 }

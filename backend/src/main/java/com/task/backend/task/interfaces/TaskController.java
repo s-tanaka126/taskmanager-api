@@ -79,7 +79,7 @@ public class TaskController {
 		}
 		if(taskRequest.getTime() != null) {
 			task.setTaskTime(Time.valueOf(taskRequest.getTime()));
-			}
+		}
 			task.setTaskPlace(taskRequest.getPlace());
 	
 		return taskFactory.createTaskResponse(task);
