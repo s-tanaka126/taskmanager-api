@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @Component
 public class TaskResponse {
-
-    private int id;
+	private int id;
 	private String name;
 	private String date;
 	private String time;
@@ -18,3 +17,4 @@ public class TaskResponse {
 	private boolean complete;
     
 }
+
